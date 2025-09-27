@@ -1,451 +1,274 @@
-// FileName: /Testimonial.tsx
-'use client';
-
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from "framer-motion"; // Keep if you want to animate the section itself
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
-
-// Import Lucide React icons
-import { Users, Calendar, ThumbsUp, ShieldCheck, Clock, Share, Rocket, Zap, Gem } from 'lucide-react';
+"use client";
+import { useRef, useEffect, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 // Register GSAP plugins
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
 }
 
-// Placeholder for cn utility - UPDATED TO HANDLE OBJECTS
-type ClassValue = string | Record<string, boolean | undefined> | null | undefined;
-
-const cn = (...args: ClassValue[]) => {
-  const classes: string[] = [];
-  args.forEach(arg => {
-    if (typeof arg === 'string' && arg) {
-      classes.push(arg);
-    } else if (typeof arg === 'object' && arg !== null) {
-      for (const key in arg) {
-        if (Object.prototype.hasOwnProperty.call(arg, key) && arg[key]) {
-          classes.push(key);
-        }
-      }
-    }
-  });
-  return classes.filter(Boolean).join(' ');
-};
-
-// --- NEW Testimonial Interface for TestimonialStack ---
-export interface Testimonial {
-  id: string | number;
-  initials: string;
-  name: string;
-  role: string; // Renamed from 'designation' to 'role' for consistency
-  quote: string;
-  tags: { text: string; type: 'featured' | 'default' }[];
-  stats: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; text: string; }[];
-  avatarGradient: string;
-  category: 'Individuals' | 'Teams' | 'Parents'; // Added category for filtering
-}
-
-// --- Original Testimonial Data (adapted for new interface) ---
-const allTestimonialsData: Testimonial[] = [
-  {
-    id: 1,
-    quote: "This retreat was a life-changing experience. I felt completely rejuvenated and reconnected with myself. The guidance was exceptional, and the natural setting was breathtaking.",
-    name: "Sarah J.",
-    role: "Marketing Manager",
-    initials: "SJ",
-    tags: [{ text: 'Personal Growth', type: 'default' }, { text: 'Retreat', type: 'featured' }],
-    stats: [{ icon: ThumbsUp, text: 'Highly Recommended' }, { icon: Calendar, text: 'Joined 3 months ago' }],
-    avatarGradient: 'linear-gradient(135deg, #5e6ad2, #8b5cf6)',
-    category: 'Individuals',
-  },
-  {
-    id: 2,
-    quote: "An incredible journey of self-discovery. The mindfulness practices and outdoor activities were perfectly balanced. I left feeling refreshed and inspired.",
-    name: "David L.",
-    role: "Software Engineer",
-    initials: "DL",
-    tags: [{ text: 'Mindfulness', type: 'default' }, { text: 'Self-Discovery', type: 'featured' }],
-    stats: [{ icon: Rocket, text: 'Inspired' }, { icon: Clock, text: '1 month ago' }],
-    avatarGradient: 'linear-gradient(135deg, #10b981, #059669)',
-    category: 'Individuals',
-  },
-  {
-    id: 3,
-    quote: "Our team's productivity and cohesion significantly improved after the wellness workshop. The practical tools for stress management were invaluable.",
-    name: "Emily R.",
-    role: "Team Lead, Tech Solutions",
-    initials: "ER",
-    tags: [{ text: 'Team Building', type: 'featured' }, { text: 'Corporate', type: 'default' }],
-    stats: [{ icon: Users, text: 'Team of 15' }, { icon: ShieldCheck, text: 'Verified Impact' }],
-    avatarGradient: 'linear-gradient(135deg, #f59e0b, #d97706)',
-    category: 'Teams',
-  },
-  {
-    id: 4,
-    quote: "I've attended several retreats, and this one stands out. The attention to detail and the genuine care from the organizers made it truly special.",
-    name: "Michael B.",
-    role: "Entrepreneur",
-    initials: "MB",
-    tags: [{ text: 'Luxury', type: 'default' }, { text: 'Exclusive', type: 'featured' }],
-    stats: [{ icon: Gem, text: 'Exceptional' }, { icon: Share, text: 'Shared 5 times' }],
-    avatarGradient: 'linear-gradient(135deg, #ec4899, #d946ef)',
-    category: 'Individuals',
-  },
-  {
-    id: 5,
-    quote: "As a busy parent, finding time for self-care is hard. This program offered realistic strategies that fit into my schedule and truly made a difference.",
-    name: "Jessica T.",
-    role: "Full-time Mom",
-    initials: "JT",
-    tags: [{ text: 'Parenting', type: 'featured' }, { text: 'Self-Care', type: 'default' }],
-    stats: [{ icon: Clock, text: 'Daily Routine' }, { icon: ThumbsUp, text: 'Life-changing' }],
-    avatarGradient: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-    category: 'Parents',
-  },
-  {
-    id: 6,
-    quote: "The coaching helped our leadership team develop better communication and resilience. Highly recommend for corporate wellness initiatives.",
-    name: "Robert K.",
-    role: "CEO, Financial Services",
-    initials: "RK",
-    tags: [{ text: 'Leadership', type: 'featured' }, { text: 'Corporate', type: 'default' }],
-    stats: [{ icon: Users, text: 'Leadership Team' }, { icon: Zap, text: 'Improved Resilience' }],
-    avatarGradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
-    category: 'Teams',
-  },
-  {
-    id: 7,
-    quote: "I finally feel like I have the tools to manage daily stress and be more present with my family. A truly transformative experience for parents.",
-    name: "Maria S.",
-    role: "Educator & Mother",
-    initials: "MS",
-    tags: [{ text: 'Family Wellness', type: 'featured' }, { text: 'Stress Management', type: 'default' }],
-    stats: [{ icon: Calendar, text: 'Ongoing Support' }, { icon: ThumbsUp, text: 'Highly Effective' }],
-    avatarGradient: 'linear-gradient(135deg, #a855f7, #9333ea)',
-    category: 'Parents',
-  },
-  {
-    id: 8,
-    quote: "The personalized coaching helped me overcome my mobility limitations and regain confidence in my physical abilities. Fantastic support!",
-    name: "Tom H.",
-    role: "Retired Engineer",
-    initials: "TH",
-    tags: [{ text: 'Mobility', type: 'default' }, { text: 'Personalized Coaching', type: 'featured' }],
-    stats: [{ icon: ShieldCheck, text: 'Regained Confidence' }, { icon: Clock, text: '3 months program' }],
-    avatarGradient: 'linear-gradient(135deg, #22c55e, #16a34a)',
-    category: 'Individuals',
-  },
-];
-
-// --- NEW TestimonialStack Component (from your provided code) ---
-export interface TestimonialStackProps {
-  testimonials: Testimonial[];
-  /** How many cards to show behind the main card */
-  visibleBehind?: number;
-}
-
-export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: TestimonialStackProps) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isDragging, setIsDragging] = useState(0); // Changed to number to track drag state more robustly
-  const [dragOffset, setDragOffset] = useState(0);
-  const dragStartRef = useRef(0);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const totalCards = testimonials.length;
-
-  const navigate = useCallback((newIndex: number) => {
-    setActiveIndex((newIndex + totalCards) % totalCards);
-  }, [totalCards]);
-
-  const handleDragStart = (e: React.MouseEvent | React.TouchEvent, index: number) => {
-    if (index !== activeIndex) return;
-    setIsDragging(1); // Set to 1 to indicate dragging
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    dragStartRef.current = clientX;
-    cardRefs.current[activeIndex]?.classList.add('is-dragging');
-  };
-
-  const handleDragMove = useCallback((e: MouseEvent | TouchEvent) => {
-    if (!isDragging) return; // Check if isDragging is truthy (1)
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    setDragOffset(clientX - dragStartRef.current);
-  }, [isDragging]);
-
-  const handleDragEnd = useCallback(() => {
-    if (!isDragging) return; // Check if isDragging is truthy (1)
-    cardRefs.current[activeIndex]?.classList.remove('is-dragging');
-    if (Math.abs(dragOffset) > 50) {
-      navigate(activeIndex + (dragOffset < 0 ? 1 : -1));
-    }
-    setIsDragging(0); // Reset to 0
-    setDragOffset(0);
-  }, [isDragging, dragOffset, activeIndex, navigate]);
-
-  useEffect(() => {
-    if (isDragging) { // Check if isDragging is truthy (1)
-      window.addEventListener('mousemove', handleDragMove);
-      window.addEventListener('touchmove', handleDragMove);
-      window.addEventListener('mouseup', handleDragEnd);
-      window.addEventListener('touchend', handleDragEnd);
-    }
-    return () => {
-      window.removeEventListener('mousemove', handleDragMove);
-      window.removeEventListener('touchmove', handleDragMove);
-      window.removeEventListener('mouseup', handleDragEnd);
-      window.removeEventListener('touchend', handleDragEnd);
-    };
-  }, [isDragging, handleDragMove, handleDragEnd]);
-
-  // Autoplay functionality (adapted from your original CircularTestimonials)
-  useEffect(() => {
-    const autoplayInterval = setInterval(() => {
-      if (!isDragging) { // Only autoplay if not currently dragging
-        navigate(activeIndex + 1);
-      }
-    }, 5000); // Change testimonial every 5 seconds
-
-    return () => clearInterval(autoplayInterval);
-  }, [activeIndex, isDragging, navigate]);
-
-
-  if (!testimonials?.length) return (
-    <div className="testimonial-container text-center text-gray-600 py-10">
-      No testimonials available for this category yet.
-    </div>
-  );
-
-  return (
-    <section className="testimonials-stack-wrapper relative pb-10 pt-10"> {/* Added padding for pagination */}
-      {testimonials.map((testimonial, index) => {
-        const isActive = index === activeIndex;
-        // Calculate the card's position in the display order
-        const displayOrder = (index - activeIndex + totalCards) % totalCards;
-
-        // --- DYNAMIC STYLE CALCULATION ---
-        const style: React.CSSProperties = {};
-        if (displayOrder === 0) { // The active card
-          style.transform = `translateX(${dragOffset}px)`;
-          style.opacity = 1;
-          style.zIndex = totalCards;
-        } else if (displayOrder <= visibleBehind) { // Cards stacked behind
-          const scale = 1 - 0.05 * displayOrder;
-          const translateY = -2 * displayOrder; // in rem
-          style.transform = `scale(${scale}) translateY(${translateY}rem)`;
-          style.opacity = 1 - 0.2 * displayOrder;
-          style.zIndex = totalCards - displayOrder;
-        } else { // Cards that are out of view
-          style.transform = 'scale(0)';
-          style.opacity = 0;
-          style.zIndex = 0;
-        }
-
-        const tagClasses = (type: 'featured' | 'default') => type === 'featured'
-          ? 'bg-blue-600/20 text-blue-600 border border-blue-600/30' // Adjusted to fit existing color scheme
-          : 'bg-gray-200 text-gray-700'; // Adjusted to fit existing color scheme
-
-        return (
-          <div
-            ref={(el) => { cardRefs.current[index] = el; }} // Corrected ref assignment: no explicit return
-            key={testimonial.id}
-            className="testimonial-card glass-effect backdrop-blur-xl"
-            style={style} // Apply dynamic styles here
-            onMouseDown={(e) => handleDragStart(e, index)}
-            onTouchStart={(e) => handleDragStart(e, index)}
-          >
-            <div className="p-6 md:p-8">
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center text-white font-semibold text-base" style={{ background: testimonial.avatarGradient }}>
-                    {testimonial.initials}
-                  </div>
-                  <div>
-                    <h3 className="text-gray-800 font-medium text-lg">{testimonial.name}</h3> {/* Adjusted text color */}
-                    <p className="text-sm text-gray-600 mt-1">{testimonial.role}</p> {/* Adjusted text color */}
-                  </div>
-                </div>
-              </div>
-
-              <blockquote className="text-gray-700 leading-relaxed text-lg mb-6">"{testimonial.quote}"</blockquote> {/* Adjusted text color */}
-
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-t border-gray-200 pt-4 gap-4"> {/* Adjusted border color */}
-                <div className="flex flex-wrap gap-2">
-                  {testimonial.tags.map((tag, i) => (
-                    <span key={i} className={['text-xs', 'px-2', 'py-1', 'rounded-md', tagClasses(tag.type)].join(' ')}>
-                      {tag.text}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-center gap-4 text-xs text-gray-600"> {/* Adjusted text color */}
-                  {testimonial.stats.map((stat, i) => {
-                    const IconComponent = stat.icon;
-                    return (
-                      <span key={i} className="flex items-center">
-                        <IconComponent className="mr-1.5 h-3.5 w-3.5" />
-                        {stat.text}
-                      </span>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
-
-      <div className="pagination flex gap-2 justify-center absolute bottom-0 left-0 right-0">
-        {testimonials.map((_, index) => (
-          <button key={index} aria-label={`Go to testimonial ${index + 1}`} onClick={() => navigate(index)} className={`pagination-dot ${activeIndex === index ? 'active' : ''}`} />
-        ))}
-      </div>
-      <style jsx>{`
-        .testimonials-stack-wrapper {
-          min-height: 30rem; /* Ensure enough space for the stack */
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-        }
-        .testimonial-card {
-          position: absolute;
-          width: 100%;
-          max-width: 36rem; /* Max width for the cards */
-          background-color: rgba(255, 255, 255, 0.8); /* Light background for glass effect */
-          border-radius: 1.5rem; /* Rounded corners */
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
-          transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-          cursor: grab;
-          left: 50%;
-          transform: translateX(-50%);
-          transform-origin: center bottom; /* Scale from bottom center */
-        }
-        .testimonial-card.is-dragging {
-          transition: none; /* Disable transition during drag */
-          cursor: grabbing;
-        }
-        .pagination {
-          bottom: 1rem; /* Position pagination dots */
-        }
-        .pagination-dot {
-          width: 0.75rem;
-          height: 0.75rem;
-          border-radius: 50%;
-          background-color: #d1d5db; /* Gray-300 */
-          transition: background-color 0.3s, transform 0.3s;
-          border: none;
-          cursor: pointer;
-        }
-        .pagination-dot.active {
-          background-color: #3b82f6; /* Blue-600 */
-          transform: scale(1.2);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-          .testimonial-card {
-            max-width: 90%; /* Adjust max-width for smaller screens */
-          }
-        }
-      `}</style>
-    </section>
-  );
-};
-
-
-function TestimonialSection() {
-  const [activeCategory, setActiveCategory] = useState<'Individuals' | 'Teams' | 'Parents'>('Individuals');
+function Testimonial() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const tabsRef = useRef<HTMLDivElement | null>(null);
+  const headlineRef = useRef<HTMLHeadingElement | null>(null);
+  const subtextRef = useRef<HTMLParagraphElement | null>(null);
+  const ctaRef = useRef<HTMLButtonElement | null>(null);
 
-  const filteredTestimonials = useMemo(() => {
-    return allTestimonialsData.filter(t => t.category === activeCategory);
-  }, [activeCategory]);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-
-    document.fonts.ready.then(() => {
-      // Animation for the main heading
-      if (headingRef.current) {
-        const splitHeading = new SplitText(headingRef.current, {
-          type: 'lines',
-          linesClass: 'line-inner',
-        });
-
-        gsap.set(splitHeading.lines, {
-          yPercent: 100,
-          autoAlpha: 0,
-          transformOrigin: '50% 100%',
-        });
-
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none none',
-          },
-        }).to(splitHeading.lines, {
-          yPercent: 0,
-          autoAlpha: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: 'power3.out',
-        });
-      }
-
-      // Animation for the tabs
-      if (tabsRef.current) {
-        gsap.fromTo(tabsRef.current.children,
-          { y: 30, autoAlpha: 0 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.7,
-            stagger: 0.1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: tabsRef.current,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      }
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+      defaults: { ease: "power3.out" },
     });
+
+    if (headlineRef.current) {
+      tl.fromTo(
+        headlineRef.current,
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 }
+      );
+    }
+
+    if (subtextRef.current) {
+      tl.fromTo(
+        subtextRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7 },
+        "-=0.4"
+      );
+    }
+
+    if (ctaRef.current) {
+      tl.fromTo(
+        ctaRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6 },
+        "-=0.2"
+      );
+    }
+
+    return () => {
+      tl.kill();
+    };
   }, []);
 
+  const testimonials = [
+    {
+      id: 1,
+      quote:
+        "This program completely transformed my daily routine and mindset. The guidance is so supportive and practical – I feel more balanced than ever!",
+      name: "Sarah Johnson",
+      role: "Wellness Coach",
+      rating: 5.0,
+      image: "https://i.pravatar.cc/150?img=3",
+      course: "Foundations of Holistic Wellness",
+    },
+    {
+      id: 2,
+      quote:
+        "The breathwork sessions are life-changing. I've reduced my stress levels dramatically and now incorporate these techniques into my yoga practice every day.",
+      name: "Michael Chen",
+      role: "Yoga Instructor",
+      rating: 4.9,
+      image: "https://i.pravatar.cc/150?img=4",
+      course: "Breathwork Fundamentals",
+    },
+    {
+      id: 3,
+      quote:
+        "Mobility Mastery helped me overcome chronic back pain. The sequences are easy to follow and have improved my overall movement and confidence.",
+      name: "Emily Rodriguez",
+      role: "https://i.pravatar.cc/150?img=5",
+      rating: 5.0,
+      image: "/testimonial-emily.jpg",
+      course: "Mobility Mastery",
+    },
+    {
+      id: 4,
+      quote:
+        "Mindful Eating Mastery taught me to listen to my body. No more restrictive diets – just intuitive, nourishing choices that make me feel amazing.",
+      name: "David Patel",
+      role: "Nutrition Student",
+      rating: 4.8,
+      image: "https://i.pravatar.cc/150?img=6",
+      course: "Mindful Eating Mastery",
+    },
+    {
+      id: 5,
+      quote:
+        "The Stress Management Toolkit is my go-to for busy days. Simple, effective tools that fit into any schedule and truly build resilience.",
+      name: "Lisa Thompson",
+      role: "Corporate Executive",
+      rating: 4.9,
+      image: "https://i.pravatar.cc/150?img=7",
+      course: "Stress Management Toolkit",
+    },
+    {
+      id: 6,
+      quote:
+        "Starting my day with the Morning Routine Revolution has been a game-changer. More energy, focus, and positivity from the very first week!",
+      name: "Alex Rivera",
+      role: "Entrepreneur",
+      rating: 5.0,
+      image: "https://i.pravatar.cc/150?img=8",
+      course: "Morning Routine Revolution",
+    },
+  ];
+
+  // autoplay for carousel
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [testimonials.length]);
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-6xl">
-        <h2 ref={headingRef} className="text-3xl md:text-4xl lg:text-5xl font-light text-center text-gray-800 mb-12">
-          What Our Clients Say
+    <section
+      ref={sectionRef}
+      className="relative py-16 md:py-24 w-full bg-[#f8f5f2] overflow-hidden"
+    >
+      {/* Decorative elements */}
+      <div className="absolute w-auto left-[-90px] top-[20px] z-10 scale-x-[-1]">
+        <img src="/yogaf2.png" alt="" />
+      </div>
+      <div className="absolute h-[34%] w-auto right-[-2px] bottom-[28px] z-10 scale-x-[-1]">
+        <img src="/palm2.png" alt="" />
+      </div>
+      <div className="absolute bottom-[50px] left-[100px] opacity-35 z-0">
+        <img
+          className="h-full w-auto"
+          src="/yoga.png"
+          alt="Rotating wheel"
+        />
+      </div>
+
+      <div className="absolute top-[40px] right-[40px] z-0">
+        <img className="h-full w-auto" src="/yoga4.png" alt="" />
+      </div>
+
+      <div className="container mx-auto px-4 max-w-6xl relative z-20">
+        {/* Headline */}
+        <h2
+          ref={headlineRef}
+          className="text-4xl md:text-5xl font-light text-center text-[#333] mb-6 font-serif"
+        >
+          What Our Students Say
         </h2>
 
-        {/* Tabs for categories */}
-        <div ref={tabsRef} className="flex justify-center space-x-4 md:space-x-6 mb-12">
-          {['Individuals', 'Teams', 'Parents'].map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category as 'Individuals' | 'Teams' | 'Parents')}
-              className={cn(
-                "px-6 py-3 rounded-full text-lg font-medium transition-all duration-300",
-                activeCategory === category
-                  ? "bg-blue-600 text-white shadow-lg"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              )}
-            >
-              {category}
-            </button>
-          ))}
+        {/* Subtext */}
+        <p
+          ref={subtextRef}
+          className="text-xl font-light text-center text-[#555] mb-12 max-w-3xl mx-auto font-sans"
+        >
+          Hear from those who&apos;ve transformed their lives through our
+          wellness programs. Join thousands of students finding balance,
+          strength, and inner peace.
+        </p>
+
+        {/* Carousel */}
+        <div className="relative overflow-hidden">
+          <div
+            className="flex transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${index * 100}%)` }}
+          >
+            {testimonials.map((testimonial) => (
+              <div
+                key={testimonial.id}
+                className="min-w-full px-4 flex-shrink-0"
+              >
+                <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6 max-w-2xl mx-auto">
+                  <div className="flex items-start mb-4">
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="w-16 h-16 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <div className="flex items-center mb-2">
+                        {[...Array(5)].map((_, i) => (
+                          <svg
+                            key={i}
+                            className={`w-5 h-5 ${
+                              i < Math.floor(testimonial.rating)
+                                ? "text-[#c37f67]"
+                                : "text-[#ADf0E8]"
+                            }`}
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"></path>
+                          </svg>
+                        ))}
+                      </div>
+                      <p className="text-sm text-[#55D0C7] font-medium">
+                        {testimonial.course}
+                      </p>
+                    </div>
+                  </div>
+                  <blockquote className="text-[#555] text-lg italic mb-4 leading-relaxed">
+                    &quot;{testimonial.quote}&quot;
+                  </blockquote>
+                  <h4 className="text-xl font-semibold text-[#333]">
+                    {testimonial.name}
+                  </h4>
+                  <p className="text-sm text-[#999]">{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Dots */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`w-3 h-3 rounded-full ${
+                  i === index ? "bg-[#c37f67]" : "bg-[#ddd]"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Testimonials Stack */}
-        <TestimonialStack testimonials={filteredTestimonials} visibleBehind={2} />
+        {/* Stats Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center mt-16">
+          <div className="p-6 bg-white rounded-2xl shadow-sm border border-[#ADf0E8]">
+            <p className="text-4xl font-bold text-[#c37f67]">2,000+</p>
+            <p className="text-lg text-[#555]">Happy Students</p>
+          </div>
+          <div className="p-6 bg-white rounded-2xl shadow-sm border border-[#ADf0E8]">
+            <p className="text-4xl font-bold text-[#c37f67]">4.9</p>
+            <p className="text-lg text-[#555]">Average Rating</p>
+          </div>
+          <div className="p-6 bg-white rounded-2xl shadow-sm border border-[#ADf0E8]">
+            <p className="text-4xl font-bold text-[#c37f67]">98%</p>
+            <p className="text-lg text-[#555]">Recommendation Rate</p>
+          </div>
+          <div className="p-6 bg-white rounded-2xl shadow-sm border border-[#ADf0E8]">
+            <p className="text-4xl font-bold text-[#c37f67]">500+</p>
+            <p className="text-lg text-[#555]">Testimonials</p>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="text-center mt-12">
+          <button
+            ref={ctaRef}
+            className="bg-[#c37f67] hover:bg-[#c76947] text-white px-8 py-4 rounded-lg text-lg font-medium transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300"
+          >
+            Join Our Community
+          </button>
+        </div>
       </div>
     </section>
   );
 }
 
-export default TestimonialSection;
+export default Testimonial;

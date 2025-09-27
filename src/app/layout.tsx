@@ -2,14 +2,17 @@
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import About from "./components/About";
 import Services from "./components/Services";
-import RetreatsSection from "./components/Retreat";
 import Courses from "./components/Courses";
-import TestimonialSection from "./components/Testimonial";
-import Community from "./components/Community";
-import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import Retreat1 from "./components/Retreat1";
+import About2 from "./components/About2";
+import Philosophy from "./components/Philosophy";
+import Approach from "./components/Approach";
+import Begin from "./components/Begin";
+import Testimonial from "./components/Testimonial";
+import Marquee from "./components/Marquee";
+import Gallery from "./components/Gallery";
 
 export default function RootLayout({
   children,
@@ -20,14 +23,17 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-black">
         <Navbar/>
-        <Hero/>
-        <About/>
+        <Hero/>     
+        <About2/>
+        <Philosophy/>
+        <Approach/>
+        <Begin/>
         <Services/>
-        <RetreatsSection/>
+        <Retreat1/>
         <Courses/>
-        <TestimonialSection/>
-        <Community/>
-        <Contact/>
+        <Testimonial/>
+        <Marquee/>
+        <Gallery/>
         <Footer/>
         {children}
       </body>
