@@ -11,10 +11,6 @@ function Marquee() {
 
   return (
     <div className="relative overflow-hidden bg-[#f8f5f2] py-8">
-      {/* Background decorative elements (optional, matching previous style) */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#ADf0E8]/20 to-[#55D0C7]/20"></div>
-      </div>
 
       <div className="relative flex whitespace-nowrap animate-marquee">
         {/* First set of texts */}

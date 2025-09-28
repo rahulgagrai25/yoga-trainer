@@ -5,8 +5,8 @@ import Hero from "./components/Hero";
 import Services from "./components/Services";
 import Courses from "./components/Courses";
 import Footer from "./components/Footer";
-import Retreat1 from "./components/Retreat1";
-import About2 from "./components/About2";
+import Retreat from "./components/Retreat";
+import About from "./components/About";
 import Philosophy from "./components/Philosophy";
 import Approach from "./components/Approach";
 import Begin from "./components/Begin";
@@ -24,12 +24,12 @@ export default function RootLayout({
       <body className="bg-black">
         <Navbar/>
         <Hero/>     
-        <About2/>
+        <About/>
         <Philosophy/>
         <Approach/>
         <Begin/>
         <Services/>
-        <Retreat1/>
+        <Retreat/>
         <Courses/>
         <Testimonial/>
         <Marquee/>

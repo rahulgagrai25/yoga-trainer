@@ -80,7 +80,7 @@ function Footer() {
   ];
 
   const contactInfo = [
-    { label: 'Email', value: 'hello@serenenature.com', href: 'mailto:hello@serenenature.com' },
+    { label: 'Email', value: 'asmurray@holistic.com', href: 'mailto:asmurray@holistic.com' },
     { label: 'Phone', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
     { label: 'Location', value: 'Based in Sedona, AZ', href: '#contact' },
   ];
@@ -114,7 +114,7 @@ function Footer() {
           
           {/* Brand Column */}
           <div className="lg:col-span-2 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <span className="text-3xl font-serif text-[#333] tracking-wider mb-4">SereneNature</span>
+            <span className="text-3xl font-serif text-[#333] tracking-wider mb-4">Aaron S. Murray</span>
             <p className="text-lg font-light text-[#555] mb-6 max-w-md">
               Holistic wellness coaching for sustainable health. Find your balance, strength, and inner peace.
             </p>
@@ -234,7 +234,7 @@ function Footer() {
         <div className="pt-8 border-t border-[#e9d8c9]/50">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-[#555] text-sm font-light">
-              © {new Date().getFullYear()} SereneNature. All rights reserved.
+              © {new Date().getFullYear()} Aaron S. Murray. All rights reserved.
             </p>
             
             <div className="flex space-x-6 text-sm text-[#555] font-light">

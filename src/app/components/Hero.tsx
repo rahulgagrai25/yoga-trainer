@@ -104,7 +104,7 @@ function Hero() {
       
       gsap.to(slides[currentSlide], {
         opacity: 1,
-        duration: 1.2,
+        duration: 1.0,
         ease: 'power2.inOut'
       });
     }

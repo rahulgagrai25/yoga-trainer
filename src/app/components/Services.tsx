@@ -12,17 +12,17 @@ function Services() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Services data
   const services = [
     {
       id: 1,
       title: "1:1 Coaching",
-      description:
-        "Personalized one-on-one sessions tailored to your specific health and wellness goals.",
+      description: "Personalized one-on-one sessions tailored to your specific health and wellness goals.",
       icon: (
         <svg
-          className="w-10 h-10"
+          className="w-8 h-8"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -43,11 +43,10 @@ function Services() {
     {
       id: 2,
       title: "Group Wellness",
-      description:
-        "Join small group sessions for shared learning, motivation, and community support.",
+      description: "Join small group sessions for shared learning, motivation, and community support.",
       icon: (
         <svg
-          className="w-10 h-10"
+          className="w-8 h-8"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -68,11 +67,10 @@ function Services() {
     {
       id: 3,
       title: "Corporate Wellness",
-      description:
-        "Bring wellness to your workplace with customized programs for teams and organizations.",
+      description: "Bring wellness to your workplace with customized programs for teams and organizations.",
       icon: (
         <svg
-          className="w-10 h-10"
+          className="w-8 h-8"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -93,11 +91,10 @@ function Services() {
     {
       id: 4,
       title: "Lifestyle Guidance",
-      description:
-        "Comprehensive lifestyle assessment and ongoing support for holistic well-being.",
+      description: "Comprehensive lifestyle assessment and ongoing support for holistic well-being.",
       icon: (
         <svg
-          className="w-10 h-10"
+          className="w-8 h-8"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -136,24 +133,46 @@ function Services() {
       );
     }
 
-    // Animation for service cards
-    cardsRef.current.forEach((card, index) => {
-      gsap.fromTo(
-        card,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          delay: index * 0.1,
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    });
+    // Animation for service cards - different animation for mobile
+    if (window.innerWidth < 768) {
+      // Mobile animation - horizontal entrance
+      cardsRef.current.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          { x: 50, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.7,
+            delay: index * 0.1,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      });
+    } else {
+      // Desktop animation - vertical entrance
+      cardsRef.current.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            delay: index * 0.1,
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      });
+    }
 
     return () => {
       // Clean up scroll triggers
@@ -171,58 +190,76 @@ function Services() {
   return (
     <section
       ref={sectionRef}
-      className="py-16 md:py-24 relative overflow-hidden bg-[#fcfaf8] h-auto"
+      className="py-12 md:py-24 relative overflow-hidden bg-[#fcfaf8] h-auto"
       id="services"
     >
-      {/* Decorative elements */}
-      <div>
+      {/* Decorative elements - hidden on mobile */}
+      <div className="max-sm:hidden">
         <img
-          className="absolute h-[35%] w-auto right-[-70px] top-[-3px] z-10 max-sm:opacity-0"
+          className="absolute h-[35%] w-auto right-[-70px] top-[-3px] z-10"
           src="/palm.png"
           alt=""
         />
       </div>
-      <div>
+      <div className="max-sm:hidden">
         <img
-          className="absolute h-[34%] w-auto left-[-3px] bottom-[0px] z-10 max-sm:opacity-0"
+          className="absolute h-[34%] w-auto left-[-3px] bottom-[0px] z-10"
           src="/palm2.png"
           alt=""
         />
       </div>
 
-      <div className="absolute top-[600px] left-[800px] opacity-35 z-0">
+      <div className="absolute top-[600px] left-[800px] opacity-35 z-0 max-sm:hidden">
         <img className="h-full w-auto" src="/yoga.png" alt="" />
       </div>
 
-      <div className="absolute top-[40px] left-[40px] z-0">
+      <div className="absolute top-[40px] left-[40px] z-0 max-sm:hidden">
         <img className="h-full w-auto" src="/yoga4.png" alt="" />
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-20 pb-[400px]">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-20 pb-16 md:pb-[400px]">
         {/* Section Heading */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <h2
             ref={headingRef}
-            className="text-4xl md:text-5xl font-light text-[#333] mb-6 font-serif"
+            className="text-3xl md:text-5xl font-light text-[#333] mb-4 md:mb-6 font-serif"
           >
             Coaching Packages
           </h2>
-          <p className="text-xl text-[#555] max-w-2xl mx-auto font-sans">
+          <p className="text-lg md:text-xl text-[#555] max-w-2xl mx-auto font-sans px-4">
             Discover the right wellness journey for your needs and lifestyle
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Mobile Horizontal Scroll Indicator */}
+        <div className="md:hidden flex justify-center mb-6">
+          <div className="flex items-center space-x-2 text-[#55D0C7]">
+            <span className="text-sm">Scroll horizontally</span>
+            <svg className="w-4 h-4 animate-bounce horizontal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Services Container - Horizontal scroll on mobile */}
+        <div 
+          ref={scrollContainerRef}
+          className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 overflow-x-auto md:overflow-visible pb-6 md:pb-0 scrollbar-hide"
+          style={{
+            scrollSnapType: 'x mandatory',
+            scrollPadding: '0 1rem'
+          }}
+        >
           {services.map((service) => (
             <div
               key={service.id}
               ref={addToRefs}
-              className={`rounded-2xl border ${service.borderColor} bg-white p-8 flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group`}
+              className={`flex-shrink-0 w-80 md:w-auto rounded-2xl border ${service.borderColor} bg-white p-6 md:p-8 flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group scroll-snap-align-start`}
+              style={{ scrollSnapAlign: 'start' }}
             >
               {/* Icon */}
               <div
-                className={`w-16 h-16 ${service.color} rounded-full flex items-center justify-center mb-6 group-hover:bg-[#55D0C7] transition-colors duration-300`}
+                className={`w-12 h-12 md:w-16 md:h-16 ${service.color} rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:bg-[#55D0C7] transition-colors duration-300`}
               >
                 <div
                   className={`${service.iconColor} group-hover:text-white transition-colors duration-300`}
@@ -232,34 +269,52 @@ function Services() {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-medium text-[#333] mb-4 group-hover:text-[#55D0C7] transition-colors duration-300">
+              <h3 className="text-lg md:text-xl font-medium text-[#333] mb-3 md:mb-4 group-hover:text-[#55D0C7] transition-colors duration-300">
                 {service.title}
               </h3>
 
               {/* Description */}
-              <p className="text-[#555] mb-6 flex-grow font-light">
+              <p className="text-[#555] mb-4 md:mb-6 flex-grow font-light text-sm md:text-base">
                 {service.description}
               </p>
 
               {/* CTA Button */}
-              <button className="self-start px-6 py-3 text-base font-medium text-[#55D0C7] bg-transparent border border-[#55D0C7] rounded-lg hover:bg-[#55D0C7] hover:text-white transition-colors duration-300">
+              <button className="self-start px-4 py-2 md:px-6 md:py-3 text-sm md:text-base font-medium text-[#55D0C7] bg-transparent border border-[#55D0C7] rounded-lg hover:bg-[#55D0C7] hover:text-white transition-colors duration-300">
                 Learn More
               </button>
             </div>
           ))}
         </div>
 
-        <div className="relative top-[100px]">
-          <h1 className="text-6xl font-medium text-gray-700">
+        {/* Quote Section - Compact on mobile */}
+        <div className="relative top-8 md:top-[100px] text-center md:text-left">
+          <h1 className="text-2xl md:text-6xl font-medium text-gray-700 px-4 md:px-0">
             "Be the part of the Transformation Journey."
           </h1>
-          <p></p>
         </div>
 
-        <div className=" mt-20 absolute top-[400px] right-[-140px] max-sm:opacity-0">
+        <div className="mt-20 absolute top-[400px] right-[-140px] max-sm:hidden">
           <img className="h-full w-auto" src="/yogaf1.png" alt="" />
         </div>
       </div>
+
+      {/* Custom scrollbar styles */}
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .horizontal {
+          animation: horizontalBounce 1s infinite;
+        }
+        @keyframes horizontalBounce {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(4px); }
+        }
+      `}</style>
     </section>
   );
 }

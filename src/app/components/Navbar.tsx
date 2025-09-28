@@ -91,7 +91,7 @@ function Nav() {
         <div ref={logoRef} className="flex items-center">
           <span className={`text-xl font-serif tracking-wider transition-colors duration-300 ${
             isScrolled ? 'text-[#1b4629]' : 'text-white'
-          }`}>SereneNature</span>
+          }`}>Aaron S. Murray</span>
         </div>
 
         {/* Desktop Menu */}
