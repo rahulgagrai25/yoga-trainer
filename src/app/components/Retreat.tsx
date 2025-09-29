@@ -128,13 +128,6 @@ const UpcomingRetreats = () => {
         />
       </div>
 
-      <div className="absolute top-10 left-10 opacity-15 z-0 hidden md:block">
-        <img className="h-16 w-auto" src="/yoga3.png" alt="Decorative element" />
-      </div>
-      <div className="absolute bottom-10 right-10 opacity-15 z-0 hidden md:block">
-        <img className="h-20 w-auto" src="/yoga.png" alt="Decorative element" />
-      </div>
-
       {/* Palm leaf decorations */}
       <div className="absolute h-[15%] w-auto right-[-80px] top-[-3px] z-10 hidden md:block">
         <img src="/palm.png" alt="" />

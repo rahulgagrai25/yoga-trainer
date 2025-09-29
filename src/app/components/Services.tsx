@@ -209,7 +209,7 @@ function Services() {
         />
       </div>
 
-      <div className="absolute top-[600px] left-[800px] opacity-35 z-0 max-sm:hidden">
+      <div className="absolute top-[600px] left-[800px] opacity-35 z-0 max-sm:top-0 max-sm:left-0 max-sm:opacity-10">
         <img className="h-full w-auto" src="/yoga.png" alt="" />
       </div>
 

@@ -156,7 +156,7 @@ function About() {
       <div className="py-12 md:py-24 relative">
         {/* Content */}
         <div className="max-w-6xl mx-auto px-4 md:px-8 text-center relative z-10">
-          <div className='elementp absolute opacity-25 left-[-40px] top-[-30px] max-sm:hidden'> <img src="/yoga.png" alt="" /></div>
+          <div className='elementp absolute opacity-25 left-[-40px] top-[-30px] max-sm:top-[0px] max-sm:left-[0px]'> <img src="/yoga.png" alt="" /></div>
           <h1
             ref={headlineRef}
             className="text-3xl md:text-5xl font-light text-[#333] mb-4 md:mb-6 font-serif"
