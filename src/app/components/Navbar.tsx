@@ -8,6 +8,7 @@ function Nav() {
   const menuRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const mobileCtaRef = useRef<HTMLButtonElement>(null);
   const menuItems = ['Home', 'About', 'Services', 'Retreats', 'Courses', 'Gallery', 'Contact'];
 
   // Handle scroll effects
@@ -35,6 +36,14 @@ function Nav() {
       gsap.fromTo(ctaRef.current, 
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)', delay: 0.3 }
+      );
+    }
+
+    // Animate mobile CTA button on load
+    if (mobileCtaRef.current) {
+      gsap.fromTo(mobileCtaRef.current, 
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)', delay: 0.4 }
       );
     }
 
@@ -114,8 +123,8 @@ function Nav() {
           ))}
         </div>
 
-        {/* CTA Button */}
-        <div ref={ctaRef}>
+        {/* CTA Button - Desktop */}
+        <div ref={ctaRef} className="hidden md:block">
           <button className={`px-6 py-3 text-sm rounded-full backdrop-blur-sm transition-all duration-300 transform hover:scale-105 ${
             isScrolled 
               ? 'bg-[#c37f67] hover:bg-[#c76947] text-white' 
@@ -125,24 +134,39 @@ function Nav() {
           </button>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden focus:outline-none z-50"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          <div className="w-6 h-6 flex flex-col justify-center space-y-1">
-            <span className={`block h-0.5 w-6 transition-all duration-300 ${
-              isScrolled ? 'bg-[#1b4629]' : 'bg-white'
-            } ${isMenuOpen ? 'transform rotate-45 translate-y-2' : ''}`}></span>
-            <span className={`block h-0.5 w-6 transition-all duration-300 ${
-              isScrolled ? 'bg-[#1b4629]' : 'bg-white'
-            } ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
-            <span className={`block h-0.5 w-6 transition-all duration-300 ${
-              isScrolled ? 'bg-[#1b4629]' : 'bg-white'
-            } ${isMenuOpen ? 'transform -rotate-45 -translate-y-2' : ''}`}></span>
-          </div>
-        </button>
+        {/* Mobile CTA and Menu Button Container */}
+        <div className="flex items-center space-x-3 md:hidden">
+          {/* Small Mobile CTA Button */}
+          <button 
+            ref={mobileCtaRef}
+            className={`px-3 py-2 text-xs rounded-full backdrop-blur-sm transition-all duration-300 transform hover:scale-105 ${
+              isScrolled 
+                ? 'bg-[#c37f67] hover:bg-[#c76947] text-white' 
+                : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
+            }`}
+          >
+            Book Now
+          </button>
+
+          {/* Mobile Menu Button */}
+          <button 
+            className="focus:outline-none z-50"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <div className="w-6 h-6 flex flex-col justify-center space-y-1">
+              <span className={`block h-0.5 w-6 transition-all duration-300 ${
+                isScrolled ? 'bg-[#1b4629]' : 'bg-white'
+              } ${isMenuOpen ? 'transform rotate-45 translate-y-2' : ''}`}></span>
+              <span className={`block h-0.5 w-6 transition-all duration-300 ${
+                isScrolled ? 'bg-[#1b4629]' : 'bg-white'
+              } ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+              <span className={`block h-0.5 w-6 transition-all duration-300 ${
+                isScrolled ? 'bg-[#1b4629]' : 'bg-white'
+              } ${isMenuOpen ? 'transform -rotate-45 -translate-y-2' : ''}`}></span>
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -163,7 +187,7 @@ function Nav() {
           
           {/* Mobile CTA */}
           <div className="pt-8">
-            <button className="w-full bg-[#c37f67] hover:bg-[#c76947] text-white py-4 rounded-lg text-lg font-medium transition-colors duration-300">
+            <button className="w-full bg-[#c37f67] hover:bg-[#c76947] text-white py-3 px-4 rounded-lg text-base font-medium transition-colors duration-300">
               Book a Session
             </button>
           </div>
