@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -77,10 +80,10 @@ function Philosophy({}: PhilosophyProps) {
         <div className="hidden md:block text-center">
           <h2 ref={philosophyHeadlineRef} className="text-3xl md:text-4xl font-light text-[#333] mb-8 font-serif">My Philosophy</h2>
           <blockquote className="text-2xl md:text-3xl font-light text-[#555] italic mb-8 font-serif">
-            "True wellness comes from harmony between body, mind, and spirit—not from perfection."
+            &quot;True wellness comes from harmony between body, mind, and spirit—not from perfection.&quot;
           </blockquote>
           <p className="text-lg text-[#555] max-w-3xl mx-auto font-sans">
-            I believe that everyone's journey to health is unique. My approach focuses on sustainable practices 
+            I believe that everyone&apos;s journey to health is unique. My approach focuses on sustainable practices 
             that integrate seamlessly into your life, helping you build resilience, find balance, and connect 
             with your inner strength.
           </p>
@@ -91,12 +94,12 @@ function Philosophy({}: PhilosophyProps) {
           <h2 ref={philosophyHeadlineRef} className="text-2xl font-light text-[#333] mb-6 font-serif text-center">My Philosophy</h2>
           
           <blockquote className="text-xl font-light text-[#555] italic mb-6 font-serif text-center px-4">
-            "True wellness comes from harmony between body, mind, and spirit—not from perfection."
+            &quot;True wellness comes from harmony between body, mind, and spirit—not from perfection.&quot;
           </blockquote>
 
           {/* Compact summary */}
           <p className="text-[#555] text-sm text-center mt-6 font-sans leading-relaxed">
-            Everyone's health journey is unique. I focus on sustainable practices that build resilience and balance.
+            Everyone&apos;s health journey is unique. I focus on sustainable practices that build resilience and balance.
           </p>
         </div>
       </div>

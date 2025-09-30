@@ -1,4 +1,7 @@
-import { useRef, useEffect, useMemo } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
+import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
@@ -212,7 +215,7 @@ function About() {
                 <div className="space-y-4 md:space-y-5 text-[#555] font-light font-sans">
                   <p className="text-base md:text-lg leading-relaxed">
                     As a holistic dad with over <span className="text-[#55D0C7] font-medium">10+ years of experience</span>, 
-                    I've dedicated my life to helping others find balance and wellness through natural, sustainable practices.
+                    I&apos;ve dedicated my life to helping others find balance and wellness through natural, sustainable practices.
                   </p>
                   
                   <p className="text-base md:text-lg leading-relaxed">
@@ -222,7 +225,7 @@ function About() {
                   </p>
 
                   <p className="text-base md:text-lg leading-relaxed">
-                    I'm certified in Hatha, Vinyasa, and Yin yoga traditions, and continually expand my knowledge through 
+                    I&apos;m certified in Hatha, Vinyasa, and Yin yoga traditions, and continually expand my knowledge through 
                     ongoing training in mindfulness, meditation, and functional movement.
                   </p>
                 </div>

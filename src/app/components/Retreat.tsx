@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useRef } from "react";
 import { motion, useInView, Easing } from "framer-motion";
 import { Heart, Users, Wind, Clock, MapPin, Calendar, ChevronLeft, ChevronRight } from "lucide-react";

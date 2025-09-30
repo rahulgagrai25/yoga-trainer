@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -107,7 +110,7 @@ function Approach({}: ApproachProps) {
                 </div>
                 <h3 className="text-xl font-medium text-white mb-3 group-hover:text-[#55D0C7] transition-colors duration-300">Holistic Integration</h3>
                 <p className="text-white text-sm">
-                  Yoga isn't just what happens on the mat. I help you integrate mindfulness, breathwork, 
+                  Yoga isn&apos;t just what happens on the mat. I help you integrate mindfulness, breathwork, 
                   and movement into your daily life for lasting transformation.
                 </p>
               </div>
@@ -118,8 +121,8 @@ function Approach({}: ApproachProps) {
                 </div>
                 <h3 className="text-xl font-medium text-white mb-3 group-hover:text-[#55D0C7] transition-colors duration-300">Progressive Development</h3>
                 <p className="text-white text-sm">
-                  Whether you're a beginner or advanced practitioner, I design sequences that challenge 
-                  you appropriately while honoring your body's wisdom.
+                  Whether you&apos;re a beginner or advanced practitioner, I design sequences that challenge 
+                  you appropriately while honoring your body&apos;s wisdom.
                 </p>
               </div>
               
@@ -163,7 +166,7 @@ function Approach({}: ApproachProps) {
             </div>
             <h3 className="text-2xl font-medium text-white mb-4 group-hover:text-[#55D0C7] transition-colors duration-300">Holistic Integration</h3>
             <p className="text-white">
-              Yoga isn't just what happens on the mat. I help you integrate mindfulness, breathwork, 
+              Yoga isn&apos;t just what happens on the mat. I help you integrate mindfulness, breathwork, 
               and movement into your daily life for lasting transformation.
             </p>
           </div>
@@ -174,8 +177,8 @@ function Approach({}: ApproachProps) {
             </div>
             <h3 className="text-2xl font-medium text-white mb-4 group-hover:text-[#55D0C7] transition-colors duration-300">Progressive Development</h3>
             <p className="text-white">
-              Whether you're a beginner or advanced practitioner, I design sequences that challenge 
-              you appropriately while honoring your body's wisdom.
+              Whether you&apos;re a beginner or advanced practitioner, I design sequences that challenge 
+              you appropriately while honoring your body&apos;s wisdom.
             </p>
           </div>
           

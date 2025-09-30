@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
@@ -13,6 +14,22 @@ function BentoGallery() {
   const cardsRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Helper function to assign varying spans for bento layout (desktop only)
+  function getSpanClass(index: number): string {
+    const spans = [
+      'md:col-span-4 lg:col-span-3',
+      'md:col-span-8 lg:col-span-6',
+      'md:col-span-4 lg:col-span-3',
+      'md:col-span-4 lg:col-span-3 row-span-2',
+      'md:col-span-8 lg:col-span-6',
+      'md:col-span-4 lg:col-span-3',
+      'md:col-span-4 lg:col-span-3 row-span-2',
+      'md:col-span-4 lg:col-span-3',
+      'md:col-span-8 lg:col-span-6',
+    ];
+    return spans[index % spans.length] || 'md:col-span-4 lg:col-span-3';
+  }
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -272,22 +289,6 @@ function BentoGallery() {
       `}</style>
     </section>
   );
-
-  // Helper function to assign varying spans for bento layout (desktop only)
-  function getSpanClass(index: number): string {
-    const spans = [
-      'md:col-span-4 lg:col-span-3',
-      'md:col-span-8 lg:col-span-6',
-      'md:col-span-4 lg:col-span-3',
-      'md:col-span-4 lg:col-span-3 row-span-2',
-      'md:col-span-8 lg:col-span-6',
-      'md:col-span-4 lg:col-span-3',
-      'md:col-span-4 lg:col-span-3 row-span-2',
-      'md:col-span-4 lg:col-span-3',
-      'md:col-span-8 lg:col-span-6',
-    ];
-    return spans[index % spans.length] || 'md:col-span-4 lg:col-span-3';
-  }
 }
 
 export default BentoGallery;

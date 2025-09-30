@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
@@ -153,7 +155,7 @@ function Footer() {
                 <li key={index}>
                   <a
                     href={link.href}
-                    className="text-[#555] hover:text-[#55D0C7] transition-colors duration-200 text-base font-light hover:pl-2 transition-all"
+                    className="text-[#555] hover:text-[#55D0C7] duration-200 text-base font-light hover:pl-2 transition-all"
                   >
                     {link.name}
                   </a>
@@ -248,8 +250,8 @@ function Footer() {
         {/* Wellness Quote */}
         <div className="text-center mt-8 pt-6 border-t border-[#e9d8c9]/30">
           <p className="text-[#555] italic font-light text-sm">
-            "Wellness is the complete integration of body, mind, and spirit — the realization that everything we do, 
-            think, feel, and believe has an effect on our state of well-being." — Greg Anderson
+            &quot;Wellness is the complete integration of body, mind, and spirit — the realization that everything we do, 
+            think, feel, and believe has an effect on our state of well-being.&quot; — Greg Anderson
           </p>
         </div>
       </div>

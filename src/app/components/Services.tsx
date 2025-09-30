@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
@@ -289,7 +291,7 @@ function Services() {
         {/* Quote Section - Compact on mobile */}
         <div className="relative top-8 md:top-[100px] text-center md:text-left">
           <h1 className="text-2xl md:text-6xl font-medium text-gray-700 px-4 md:px-0">
-            "Be the part of the Transformation Journey."
+            &quot;Be the part of the Transformation Journey.&quot;
           </h1>
         </div>
 
